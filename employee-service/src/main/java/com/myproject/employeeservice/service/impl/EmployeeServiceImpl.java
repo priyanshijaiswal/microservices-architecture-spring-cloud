@@ -24,10 +24,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class EmployeeServiceImpl implements EmployeeService {
     private static  final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private EmployeeRepository employeeRepository;
-    private WebClient webClient;
+    private final WebClient webClient;
     //private APIClient apiClient;
     public EmployeeMapper employeeMapper;
    // public RestTemplate restTemplate;
+
     @Override
     public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
         Employee employee= employeeMapper.toEmployee(employeeDTO);
@@ -49,11 +50,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                 , DepartmentDto.class);
         DepartmentDto departmentDto=responseEntity.getBody();*/
         DepartmentDto departmentDto=webClient.get()
-                .uri("http://localhost:8080/api/departments/" +employee.getDepartmentCode())
+                .uri("http://localhost:8030/api/departments/" +employee.getDepartmentCode())
                 .retrieve().bodyToMono(DepartmentDto.class)
                 .block();
         OrganizationDto organizationDto=webClient.get()
-                .uri("http://localhost:8083/api/organizations/" +employee.getOrganizationCode())
+                .uri("http://localhost:8084/api/organizations/" +employee.getOrganizationCode())
                 .retrieve().bodyToMono(OrganizationDto.class)
                 .block();
        // DepartmentDto departmentDto=apiClient.getDepartment(employee.getDepartmentCode());
